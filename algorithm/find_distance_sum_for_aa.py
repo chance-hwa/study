@@ -15,13 +15,15 @@ target (문자): 거리 기준이 되는 특정 아미노산.
 """
 
 def distance_sum(protein, target):
-    # find the index of the target amino acid
-    target_indices = [i for i, aa in enumerate(protein) if aa == target]
+    target_indices = list()
+    for i, aa in enumerate(protein):
+        if aa == target:
+            target_indices.append(i)
 
-    # calculate the distance sum for each position
-    distance_sums = []
+    distance_sums = list()
     for i in range(len(protein)):
-        distance_sums.append(sum([abs(i - target_index) for target_index in target_indices]))
+        distance_sum = sum([abs(i - target_index) for target_index in target_indices])
+        distance_sums.append(distance_sum)
     
     return distance_sums
 
@@ -36,14 +38,23 @@ print(distance_sum("ACDEACDE", "C"))
 # Algorithm: Brute Force
 
 def distance_sum_2(protein, target):
+    # create a list to store the distance sum
     total_length = len(protein)
     distance_sums = [0] * total_length
+
+    # calculate the distance sum for each position
     for i, aa in enumerate(protein):
         if aa == target:
             distance = [abs(i - j) for j in range(total_length)]
             distance_sums = [sum(x) for x in zip(distance_sums, distance)]
     
     return distance_sums
+
+# sample test
+print(distance_sum_2("RRM", "R"))
+# [1, 1, 3]
+print(distance_sum_2("ACDEACDE", "C"))
+# [6, 4, 4, 4, 4, 4, 6, 8]
 
 # Time Complexity: O(n*m), worst case O(n^2)
 # Space Complexity: O(n)
