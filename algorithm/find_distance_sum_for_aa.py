@@ -63,3 +63,12 @@ print(distance_sum_2("ACDEACDE", "C"))
 # Algorithm: Brute Force
 
 
+# Time Complexity: O(n)
+'''
+공옮기기 문제의 변형.
+왼쪽으로 가면서 target_sum, target_count, answer를 갱신하고
+오른쪽으로 가면서 target_sum, target_count, answer를 갱신한다.
+(포인터를 두고 두개를 동시에 계산 가능)
+
+결과적으로 target index를 찾지 않고 한번에 계산을 하면서 target을 찾고 target과의 거리를 넘겨주는 방식.
+'''
