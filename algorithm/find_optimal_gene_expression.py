@@ -27,7 +27,7 @@ def find_optimal_gene_expression(expression):
         all_combs += list(combinations(range(n), i))
     
     # 연속된 시간에 활성화할 수 없다.
-    # 따라서, 연속된 시간에 활성화되지 않도록 조합을 제한한다.
+    # 따라서 연속된 시간에 활성화되지 않도록 조합을 제한한다.
     possible_combs = []
     for comb in all_combs:
         add = True
@@ -57,3 +57,27 @@ print(find_optimal_gene_expression(expression))
 expression = [3,2,5,10,7]
 print(find_optimal_gene_expression(expression))
 # 15
+
+## time complexity O(2^n). 재귀함수를 사용하면 시간 조금 단축 가능.
+
+## greedy algorithm으로도 풀 수 있음. but 가정이 몇개 필요.
+### 이 단계에서 최적의 선택을 하면, 전체적으로 최적이 될 것이다.
+### 특정 인덱스를 무조건 고른다는 장치를 추가하면 greedy로 풀 수 있음.
+### 하지만 본 문제는 greedy를 사용하기엔 부적합함. 장치를 추가해야하기 때문에 time complexity 증가
+### 특정 순간에 최적의 선택을 한다. 항상 최적의 선택이다일 시 적용할 수 있음.
+
+## 앞을 보는 문제가 아닌 이전을 보는 문제.
+## 정석적인 풀이는 O(n)으로 가능. array 하나를 만들어 dynamic programming으로 풀 수 있음.
+## 쪼개서 보는것과 앞에서 쓴걸 쓸 수 있냐.
+
+def find_optimal_gene_expresssion_dp(expression):
+    n = len(expression)
+    dp = [0] * n
+
+    dp[0] = expression[0]
+    dp[1] = max(expression[0], expression[1])
+
+    for i in range(2, n):
+        dp[i] = max(dp[i-1], dp[i-2] + expression[i])
+    
+    return dp[-1]
