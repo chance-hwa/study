@@ -70,6 +70,22 @@ print(find_optimal_gene_expression(expression))
 ## 정석적인 풀이는 O(n)으로 가능. array 하나를 만들어 dynamic programming으로 풀 수 있음.
 ## 쪼개서 보는것과 앞에서 쓴걸 쓸 수 있냐.
 
+def max_expression_brute_force(expression, i = 0):
+    if i >= len(expression):
+        return 0
+
+    # 현재 유전자를 선택한 경우 (i + 2로 건너뜀)
+    select = expression[i] + max_expression_brute_force(expression, i + 2)
+    
+    # 현재 유전자를 선택하지 않은 경우 (i + 1로 이동)
+    skip = max_expression_brute_force(expression, i + 1)
+
+    return max(select, skip)
+
+# 예제 실행
+expression = [3, 2, 5, 10, 7]
+print(max_expression_brute_force(expression, 0))  # Output: 15
+
 def find_optimal_gene_expresssion_dp(expression):
     n = len(expression)
     dp = [0] * n
