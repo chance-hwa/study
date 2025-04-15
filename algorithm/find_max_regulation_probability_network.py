@@ -149,7 +149,7 @@ def max_prob_dijkstra(regulation_network, x, y):
 
     while max_heap:
         neg_prob, node = heapq.heappop(max_heap)
-        prob = -neg_prob
+        prob = -neg_prob # heap은 원래 최솟값을 구하는 구조. binary tree. 처음 값 기준 작으면 왼쪽 크면 오른쪽에 둠. 정렬된 형태는 아닐 수 있음.
 
         # 목적지에 도달하면 바로 종료
         if node == y:
