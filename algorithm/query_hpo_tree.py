@@ -175,3 +175,82 @@ queries = [
 ]
 
 print(query_hpo_tree(hpo_trees, queries))
+
+"""
+설명
+
+이번 문제의 핵심은 DFS로 탐색해서 부모와 자식 노드를 판별하되, 쿼리가 여러 개인 경우를 푸는 것
+
+ 따라서 DFS로 탐색은 한 번만 하고 전처리를 통해 쿼리에는 O(1)의 시간복잡도를 가지도록 해야함
+
+트리에서 a가 b의 조상인지 O(1)에 판단하려면, a의 서브트리 구간이 b의 구간을 완전히 포함하는지 확인
+
+DFS로 방문할 때,
+
+enter[x]는 x에 진입한 시점,
+
+exit[x]는 x의 서브트리를 모두 순회하고 나오는 시점
+
+따라서,
+
+a가 b의 조상이면
+
+enter[a] < enter[b] < exit[b] < exit[a]
+
+반대로 b가 a의 조상인지도 같은 방식으로 체크
+
+둘 다 아니라면 "NONE"
+
+시간 복잡도: O(N + Q)
+
+DFS 복잡도 O(N)
+
+각 query 당 O(1)
+
+전체 복잡도 = O(N + Q)
+
+Q = len(query)
+
+공간 복잡도: O(N)
+
+enter, exit dict: O(N)
+"""
+
+from collections import defaultdict
+
+def preprocess_hpo_tree(hpo_trees):
+    tree = defaultdict(list)
+    enter = dict()
+    exit = dict()
+    all_nodes = set()
+    child_nodes = set()
+    
+    for parent, child in hpo_trees:
+        tree[parent].append(child)
+        all_nodes.add(parent)
+        all_nodes.add(child)
+        child_nodes.add(child)
+        
+    def dfs(u, index):
+        enter[u] = index
+        index += 1
+        for v in tree[u]:
+            index = dfs(v, index)
+        exit[u] = index
+        index += 1
+
+        return index
+        
+    # root node가 하나라고 가정
+    root = list(all_nodes - child_nodes)[0]
+    dfs(root, 1)
+    
+    return enter, exit
+
+def ancestor_query(enter, exit, a, b):
+    if enter[a] < enter[b] and exit[b] < exit[a]:
+        return "ANCESTOR"
+    elif enter[b] < enter[a] and exit[a] < exit[b]:
+        return "DESCENDANT"
+    else:
+        return "NONE"
